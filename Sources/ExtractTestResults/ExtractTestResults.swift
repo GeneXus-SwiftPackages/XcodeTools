@@ -46,6 +46,7 @@ extension ExtractTestResuts {
 			
 			let jsonEncoder = JSONEncoder()
 			jsonEncoder.outputFormatting = .prettyPrinted
+			jsonEncoder.dateEncodingStrategy = .iso8601
 			
 			let jsonData = try jsonEncoder.encode(testSuite)
 			let jsonString = String(data: jsonData, encoding: .utf8)!
