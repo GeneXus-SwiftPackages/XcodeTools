@@ -116,7 +116,8 @@ private extension XCResultHelper {
 					 startTime: testSummary.activitySummaries.first?.start,
 					 duration: testRecord.duration,
 					 successful: testRecord.testStatus == "Success",
-					 steps: try await steps(fromTest: testSummary))
+					 steps: try await steps(fromTest: testSummary),
+					 failures: failures(from: testSummary.failureSummaries) )
 	}
 	
 	mutating func steps(fromTest testSummary: ActionTestSummary) async throws -> [TestStep] {
@@ -142,6 +143,17 @@ private extension XCResultHelper {
 		let steps = activitySummaries + failureSummaries
 		
 		return steps.sorted { $0.startTime <= $1.startTime }
+	}
+	
+	mutating func failures(from failureSummaries: [ActionTestFailureSummary]) -> [TestFailure] {
+		failureSummaries.map { failureSummary in
+				.init(uuid: failureSummary.uuid,
+					  type: .init(rawValue: failureSummary.issueType ?? "") ?? .Unknown,
+					  message: failureSummary.message,
+					  filePath: failureSummary.fileName,
+					  lineNumber: failureSummary.lineNumber,
+					  timestamp: failureSummary.timestamp)
+		}
 	}
 	
 	func steps(fromActivities activitiesSummaries: [ActionTestActivitySummary]) async throws -> [TestStep] {

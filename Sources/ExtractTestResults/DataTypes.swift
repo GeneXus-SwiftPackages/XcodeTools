@@ -41,6 +41,7 @@ struct TestResult: Codable {
 	let successful: Bool
 	
 	let steps: [TestStep]
+	let failures: [TestFailure]
 }
 
 struct TestStep: Codable {
@@ -70,6 +71,22 @@ struct TestStep: Codable {
 	}
 	
 	let substeps: [TestStep]?
+}
+
+enum FailureType: String, Codable {
+	case AssertionFailure = "Assertion Failure"
+	case Unknown
+}
+
+struct TestFailure : Codable {
+	let uuid: String
+	let type: FailureType
+	let message: String?
+	
+	let filePath: String?
+	let lineNumber: Int?
+	
+	let timestamp: Date?
 }
 
 struct TestAttachment : Codable {
