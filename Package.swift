@@ -12,7 +12,6 @@ let package = Package(
         // Products define the executables and libraries a package produces, making them visible to other packages.
 		.executable(name: "RunTests", targets: ["RunTests"]),
 		.executable(name: "ExtractTestResults", targets: ["ExtractTestResults"]),
-		.plugin(name: "RunGXTests", targets: ["RunGXTests"])
     ],
 	dependencies: [
 		.package(url: "https://github.com/apple/swift-tools-support-core.git", .upToNextMajor(from: "0.3.0")),
@@ -38,15 +37,6 @@ let package = Package(
 							.product(name: "XCParseCore", package: "xcparse"),
 							.product(name: "CollectionConcurrencyKit", package: "CollectionConcurrencyKit")
 						  ]),
-		
-		// MARK: Plugin targets
-		
-		.plugin(name: "RunGXTests",
-				capability: .command(intent: .custom(verb: "run-gxtests", description: "Run and extract results from GX Tests in project")),
-			   dependencies: [
-				.target(name: "RunTests"),
-				.target(name: "ExtractTestResults")
-			   ]),
 		
 		// MARK: Helper targets
 		
